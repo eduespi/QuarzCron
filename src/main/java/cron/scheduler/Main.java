@@ -2,7 +2,7 @@ package cron.scheduler;
 
 import cron.scheduler.dao.CronDao;
 import cron.scheduler.domain.JobData;
-import cron.scheduler.job.MyJob;
+import cron.scheduler.job.SmsJob;
 import cron.scheduler.service.JobManager;
 
 import java.text.SimpleDateFormat;
@@ -18,18 +18,16 @@ public class Main {
     public static void main(String[] args) throws Exception{
         CronDao printDao = new CronDao();
 
-        HashMap<String,String> param = new HashMap<>();
-        param.put("NAME","PEPE");
-        param.put("HORA","xxx");
-
         List<JobData> jobDataList = printDao.getHours();
+
         SimpleDateFormat formatter =new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         int i=0;
 
         for (JobData horas : jobDataList) {
+            HashMap<String,String> param = new HashMap<>();
+
 
             Date dateInicial = formatter.parse(horas.getStartDate());
-
             LocalDateTime localDateTimeInicial = dateInicial.toInstant()
                     .atZone(ZoneId.systemDefault())
                     .toLocalDateTime();
@@ -39,10 +37,11 @@ public class Main {
                     .atZone(ZoneId.systemDefault())
                     .toLocalDateTime();
 
-            JobManager.addJob("Job"+i, MyJob.class,horas.getTaskName(),horas.getTaskName(),localDateTimeInicial,localDateTimeFinal,param);
+            param.put("startDate",localDateTimeInicial.toString());
+            param.put("endDate",localDateTimeFinal.toString());
+
+            JobManager.addJob("Job"+i, SmsJob.class,horas.getTaskName(),horas.getTaskName(),localDateTimeInicial,localDateTimeFinal,param);
             i++;
         }
-
     }
-
 }

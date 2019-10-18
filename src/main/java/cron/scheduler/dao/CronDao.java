@@ -3,6 +3,7 @@ package cron.scheduler.dao;
 
 
 import cron.scheduler.domain.JobData;
+import cron.scheduler.domain.SmsData;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -57,9 +58,9 @@ public class CronDao {
     }
 
 
-    public  List<JobData> getData() throws Exception {
+    public  List<SmsData> getData(String startDate, String endDate) throws Exception {
 
-        List<JobData> jobDataList = new ArrayList<>();
+        List<SmsData> smsDataList = new ArrayList<>();
         ResultSet rs;
         String query ="SELECT op.op_code,\n" +
                 "       op.op_name,\n" +
@@ -67,8 +68,8 @@ public class CronDao {
                 "       oet.opr_ev_ty_code,\n" +
                 "       oet.opr_ev_ty_name\n" +
                 "FROM operative_event oe, opr_ev_type oet, operator op, opr_ev_type_operator_type oetot\n" +
-                "WHERE to_char(oet.opr_ev_ty_start_date, 'yyyy-MM-dd HH24:MI:SS') =  '2019-05-29 07:30:00'\n" +
-                "  AND to_char(oet.opr_ev_ty_finish_date, 'yyyy-MM-dd HH24:MI:SS') = '2019-05-29 07:45:00'\n" +
+                "WHERE to_char(oet.opr_ev_ty_start_date, 'yyyy-MM-dd HH24:MI:SS') =  startDate\n" +
+                "  AND to_char(oet.opr_ev_ty_finish_date, 'yyyy-MM-dd HH24:MI:SS') = endDate\n" +
                 "  AND oe.opr_ev_ty_code = oet.opr_ev_ty_code\n" +
                 "  AND op.op_code = oe.op_code\n" +
                 "  AND oetot.opr_ev_ty_code = oe.opr_ev_ty_code\n" +
@@ -93,26 +94,21 @@ public class CronDao {
             rs = statement.executeQuery(query);
             while (rs.next()) {
 
-                JobData jobData = new JobData();
-                jobData.setTaskName(rs.getString("nombre_tarea"));
-                jobData.setEndDate(rs.getString("fecha_fin"));
-                jobData.setStartDate(rs.getString("facha_inicio"));
-                jobDataList.add(jobData);
+                SmsData smsData = new SmsData();
+                smsData.setOpAssignedPhone(rs.getString("assigned_phone"));
+                smsData.setOpCode(rs.getString("op_code"));
+                smsData.setOpName(rs.getString("op_name"));
+                smsData.setOprEvTycode(rs.getString("opr_ev_ty_code"));
+                smsData.setOprEvTyName(rs.getString("opr_ev_ty_name"));
+
+                smsDataList.add(smsData);
             }
-            System.out.println("Cantidad de registros "+jobDataList.size());
+            System.out.println("Cantidad de registros "+smsDataList.size());
         } catch (Exception e) {
             System.out.println("Error en  Base de Datos "+e);
             throw new Exception(e);
         }
-        return jobDataList;
+        return smsDataList;
     }
-
-
-
-
-
-
-
-
 
 }
