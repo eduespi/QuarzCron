@@ -1,2 +1,2 @@
-# QuarzCron Example
+# QuartzCron Example
 Example using QuarzCron Java
