@@ -7,6 +7,7 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="cron" />
+        <module name="QuarzCron" />
       </profile>
     </annotationProcessing>
   </component>
