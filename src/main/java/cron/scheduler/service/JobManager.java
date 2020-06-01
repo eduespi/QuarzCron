@@ -19,7 +19,7 @@ public class JobManager  {
     private static String TRIGGER_GROUP_NAME = "MY_TRIGGERGROUP_NAME";
 
 
-    @SuppressWarnings("unchecked")
+
     public static void addJob(String jobName, Class cls, String jobGroupName, String triggerName,
                               LocalDateTime startDate, LocalDateTime endDate, HashMap<String, String> param) {
         try {
@@ -54,8 +54,7 @@ public class JobManager  {
     }
 
 
-    @SuppressWarnings("unchecked")
-    public static void modifyJobTime(String jobName, String time) {
+      public static void modifyJobTime(String jobName, String time) {
         TriggerKey triggerKey = TriggerKey.triggerKey(
                 jobName, TRIGGER_GROUP_NAME);
 

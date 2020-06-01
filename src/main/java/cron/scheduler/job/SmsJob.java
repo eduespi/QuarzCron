@@ -20,9 +20,6 @@ public class SmsJob implements Job {
             List<SmsData> smsDatalist = cronDao.getData(startDate,endDate);
             for (SmsData smsData : smsDatalist) {
 
-              ////////ENVIAR MENSAJE COLA JMS//////
-
-
             }
 
 
